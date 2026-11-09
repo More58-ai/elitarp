@@ -512,6 +512,7 @@
             transition: 0.3s;
         }
         .floating-chat-btn:hover { transform: scale(1.1); box-shadow: 0 8px 25px rgba(243, 168, 46, 0.8); }
+        
 
         /* МОДАЛЬНІ ВІКНА */
         .modal-overlay {
@@ -1290,3 +1291,229 @@ html,body{overflow-x:hidden;max-width:100vw}
 .auth-note i{color:var(--gold);margin-right:4px}
 
 @media (max-width:600px){.auth-container{padding:30px 18px 24px;border-radius:22px}.auth-logo{font-size:24px}}
+/* ===== РОЛЬ ДІЯ (прозора, скляна) ===== */
+.role-diia{
+  background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(140,210,255,.10),rgba(255,255,255,.22))!important;
+  color:#fff!important;border:1px solid rgba(255,255,255,.55)!important;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  text-shadow:0 0 8px rgba(160,220,255,.9);
+  box-shadow:0 0 14px rgba(160,220,255,.45),inset 0 0 10px rgba(255,255,255,.18)!important}
+
+/* ===== КНОПКА ДІЇ ===== */
+.floating-diia-btn{position:fixed;bottom:104px;right:30px;width:60px;height:60px;border-radius:50%;z-index:4000;cursor:pointer;
+  background:#000;border:2px solid rgba(255,255,255,.85);box-shadow:0 6px 20px rgba(0,0,0,.55),0 0 18px rgba(255,255,255,.25);transition:.3s}
+.floating-diia-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.floating-diia-btn:hover{transform:scale(1.1);box-shadow:0 8px 25px rgba(0,0,0,.7),0 0 28px rgba(255,255,255,.55)}
+@media (max-width:950px){.floating-diia-btn{bottom:90px;right:16px;width:54px;height:54px}}
+@media (max-width:600px){.floating-diia-btn{bottom:80px!important;right:14px!important;width:52px;height:52px}}
+
+
+
+
+
+
+
+
+/* додаткові дані по кнопці ··· */
+.pass-more{display:none;grid-template-columns:1fr 1fr;gap:12px;padding:18px 22px 0}
+.pass-card.open .pass-more{display:grid;animation:uaPanelIn .35s ease-out}
+.pass-card.open .pass-sign{display:none}
+
+.pass-ticker{margin:26px 0 0;overflow:hidden;white-space:nowrap;padding:9px 0;
+  background:linear-gradient(90deg,#a6ee94,#8ed6d2)}
+.pass-ticker-in{display:inline-block;font-size:15px;font-weight:600;color:#000;animation:passTick 22s linear infinite}
+.pass-ticker-in span{display:inline-block}
+@keyframes passTick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.pass-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:16px 22px 22px}
+.pass-name{font-size:22px;font-weight:500;text-transform:uppercase;line-height:1.15;word-break:break-word}
+.pass-dots{flex:0 0 auto;width:42px;height:42px;border-radius:50%;border:none;background:#000;color:#fff;
+  font-size:20px;font-weight:900;line-height:1;cursor:pointer;letter-spacing:1px;padding-bottom:6px;transition:.25s}
+.pass-dots:hover{transform:scale(1.1)}
+
+@media (max-width:600px){
+  .diia-screen{padding:18px 8px}
+  .pass-photo{width:96px;height:128px}
+  .pass-name{font-size:18px}
+  .pass-title{font-size:18px}
+}
+/* ===== ДІЯ 2.0: застосунок ===== */
+#diiaModal .modal-box.diia-box{position:relative;max-width:440px;width:100%;height:min(92vh,840px);padding:0!important;display:flex;flex-direction:column;overflow:hidden;text-align:left;color:#000;
+  border:none;border-radius:38px;
+  background:linear-gradient(165deg,#8fc3d4 0%,#b9d4c3 40%,#a2d6a0 72%,#6dbbb0 100%)!important;
+  box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.3)!important}
+#diiaModal .modal-close{top:18px;right:18px;z-index:6;background:rgba(0,0,0,.1);border:none;color:#000}
+#diiaModal .modal-close:hover{background:#000;color:#fff;border:none}
+
+.diia-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.diia-bg::before,.diia-bg::after{content:'';position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(70px);opacity:.75;animation:diiaFloat 14s ease-in-out infinite alternate}
+.diia-bg::before{background:#6fb9e8;top:-90px;right:-90px}
+.diia-bg::after{background:#c4f28f;bottom:40px;left:-110px;animation-delay:-6s}
+@keyframes diiaFloat{to{transform:translate(-60px,50px) scale(1.2)}}
+
+.diia-top{position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:22px 24px 6px}
+.diia-top img{width:44px;height:44px;border-radius:50%;border:2px solid #000;object-fit:cover;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.diia-top b{display:block;font-size:22px;font-weight:800;color:#000;letter-spacing:-.3px}
+.diia-top small{font-size:10px;color:rgba(0,0,0,.55);letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+
+.diia-body{position:relative;z-index:2;flex:1;min-height:0;overflow-y:auto;padding:8px 18px 22px}
+.diia-body::-webkit-scrollbar{width:4px}
+.diia-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.25);border-radius:4px}
+.dq-view{animation:uaPanelIn .4s cubic-bezier(.25,1,.5,1)}
+
+/* нижнє меню */
+.diia-tabs{position:relative;z-index:3;display:flex;background:#000;padding:8px 6px calc(10px + env(safe-area-inset-bottom))}
+.diia-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;color:#fff;font-size:11px;font-weight:600;cursor:pointer;padding:2px 0}
+.diia-tabs button i{width:48px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:18px;transition:.25s}
+.diia-tabs button.active i{background:#fff;color:#000}
+.diia-tabs button:not(.active):hover i{background:rgba(255,255,255,.15)}
+
+/* типографіка та картки */
+.dq-h{font-size:27px;font-weight:600;letter-spacing:-.4px;margin:8px 2px 16px;color:#000}
+.dq-sub{font-size:13px;color:rgba(0,0,0,.6);margin:-8px 2px 14px;line-height:1.5}
+.dq-card{background:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-radius:24px;padding:18px;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,0,0,.07)}
+.dq-cap{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.9px;color:rgba(0,0,0,.55);margin-bottom:12px}
+.dq-muted{font-size:13px;color:rgba(0,0,0,.5);padding:6px 2px}
+.dq-hint{text-align:center;font-size:12px;color:rgba(0,0,0,.55);margin-top:20px;line-height:1.5}
+.dq-note{font-size:11px;color:#0b5ed7;margin-top:7px;line-height:1.5}
+.dq-ver{text-align:center;font-size:11px;color:rgba(0,0,0,.45);margin:8px 0 4px}
+
+.dq-kv{padding:10px 0;border-bottom:1px solid rgba(0,0,0,.07)}
+.dq-kv:last-child{border-bottom:none}
+.dq-kv small{display:block;font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:rgba(0,0,0,.5)}
+.dq-kv b{display:block;font-size:14px;font-weight:600;margin-top:2px;word-break:break-word}
+
+.dq-empty{text-align:center;padding:28px 18px}
+.dq-empty>i{display:block;font-size:50px;margin-bottom:12px;color:#000}
+.dq-empty h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.dq-empty p{font-size:13px;color:rgba(0,0,0,.6);line-height:1.6;margin-bottom:12px}
+.dq-reason{background:rgba(255,255,255,.7);border-left:4px solid #d9372b;border-radius:12px;padding:12px 14px;font-size:13px;text-align:left;margin:12px 0;line-height:1.5}
+
+/* рядки-сервіси */
+.dq-svc{display:flex;align-items:center;gap:14px;padding:16px;border-radius:22px;margin-bottom:12px;cursor:pointer;
+  background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);backdrop-filter:blur(14px);box-shadow:0 6px 20px rgba(0,0,0,.07);transition:.25s}
+.dq-svc:hover{transform:translateY(-2px);background:rgba(255,255,255,.72)}
+.dq-svc>div{flex:1;min-width:0}
+.dq-svc b{display:block;font-size:15px;font-weight:700}
+.dq-svc small{display:block;font-size:12px;color:rgba(0,0,0,.55);margin-top:2px}
+.dq-svc.off{opacity:.55;cursor:default}
+.dq-svc.off:hover{transform:none;background:rgba(255,255,255,.5)}
+.dq-ico{flex:0 0 auto;width:46px;height:46px;border-radius:15px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px}
+.dq-svc.staff .dq-ico{background:linear-gradient(135deg,#13a8b3,#0072ff)}
+.dq-chip{flex:0 0 auto;font-size:10px;font-weight:800;padding:5px 10px;border-radius:20px;white-space:nowrap;background:rgba(0,0,0,.08);color:#333}
+.dq-chip.ok{background:#d6f5df;color:#12733a}.dq-chip.wait{background:#fff0bf;color:#7a5c00}.dq-chip.bad{background:#ffd9d5;color:#b3261e}
+.dq-count{display:inline-block;background:#000;color:#fff;border-radius:20px;padding:2px 11px;font-size:13px;font-weight:800;vertical-align:middle}
+.dq-ava{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #fff;flex:0 0 auto}
+.dq-ava.big{width:64px;height:64px}
+.dq-prof{display:flex;align-items:center;gap:14px}
+.dq-prof b{font-size:18px;font-weight:700}
+
+/* форми */
+.dq-field{margin-bottom:14px}
+.dq-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:rgba(0,0,0,.6);margin-bottom:6px}
+.dq-input{width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.78);color:#000;font-size:16px;transition:.2s}
+.dq-input::placeholder{color:rgba(0,0,0,.35)}
+.dq-input:focus{border-color:#000;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.08)}
+.dq-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px;border-radius:16px;background:rgba(255,255,255,.5)}
+.dq-seg button{padding:12px;border:none;border-radius:12px;background:transparent;color:#000;font-weight:700;font-size:14px;cursor:pointer;transition:.25s}
+.dq-seg button.on{background:#000;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+
+/* кнопки */
+.dq-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:16px;border-radius:18px;border:none;
+  background:#000;color:#fff;font-weight:700;font-size:14px;cursor:pointer;transition:.25s;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.dq-btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.dq-btn:active{transform:scale(.98)}
+.dq-btn.ghost{background:rgba(255,255,255,.55);color:#000;border:1px solid rgba(255,255,255,.85);box-shadow:none}
+.dq-btn.ok{background:#1faa59}.dq-btn.bad{background:#d9372b}
+.dq-row2{display:flex;gap:10px}.dq-row2 .dq-btn{flex:1}
+
+/* дошка для підпису */
+.dq-pad{position:relative;height:180px;border-radius:20px;overflow:hidden;background:rgba(255,255,255,.9);border:2px dashed rgba(0,0,0,.2);box-shadow:inset 0 2px 10px rgba(0,0,0,.06)}
+.dq-pad canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.dq-pad-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;pointer-events:none;color:rgba(0,0,0,.25);font-weight:700;font-size:15px;transition:opacity .25s}
+.dq-pad-line{position:absolute;left:22px;right:22px;bottom:38px;border-top:1px solid rgba(0,0,0,.18);pointer-events:none}
+.dq-pad-clear{position:absolute;top:8px;right:8px;display:flex;align-items:center;gap:6px;padding:7px 12px;border:none;border-radius:20px;background:rgba(0,0,0,.08);color:#000;font-size:11px;font-weight:800;cursor:pointer;transition:.2s}
+.dq-pad-clear:hover{background:#000;color:#fff}
+.dq-sigprev{display:block;max-width:100%;max-height:96px;margin:0 auto 12px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.85);object-fit:contain}
+
+/* ===== ПАСПОРТ ===== */
+.pass-card{--rx:0deg;--ry:0deg;--mx:50%;--my:25%;position:relative;overflow:hidden;border-radius:32px;color:#000;
+  background:linear-gradient(135deg,rgba(242,245,230,.86),rgba(205,229,240,.76));
+  border:1px solid rgba(255,255,255,.8);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 24px 50px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.95);
+  transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .18s ease-out;will-change:transform}
+.pass-card::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(circle at var(--mx) var(--my),rgba(255,255,255,.7),transparent 45%);mix-blend-mode:soft-light}
+.pass-card::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,120,200,.13) 42%,rgba(120,200,255,.2) 50%,rgba(160,255,160,.13) 58%,transparent 70%);
+  background-size:260% 100%;animation:passHolo 7s linear infinite}
+@keyframes passHolo{from{background-position:160% 0}to{background-position:-60% 0}}
+.pass-top,.pass-body,.pass-more,.pass-ticker,.pass-bottom{position:relative;z-index:2}
+.pass-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:24px 24px 0}
+.pass-title{font-size:21px;font-weight:500;line-height:1.2}
+.pass-crest{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:#000;color:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.pass-body{display:flex;gap:18px;padding:20px 24px 0}
+.pass-photo{width:118px;height:156px;border-radius:20px;object-fit:cover;flex:0 0 auto;background:#eee;border:1px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.pass-data{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
+.pass-row small{display:block;font-size:12.5px;font-weight:500;color:rgba(0,0,0,.7);line-height:1.35}
+.pass-row b{display:block;font-size:16px;font-weight:600;margin-top:3px;word-break:break-word}
+.pass-sign-img{display:block;max-width:100%;max-height:64px;object-fit:contain;margin-top:4px}
+.pass-sign{font-family:'Brush Script MT','Segoe Script','Lucida Handwriting',cursive;font-size:26px;color:#111;margin-top:4px;transform:rotate(-6deg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pass-more{display:none;grid-template-columns:1fr 1fr;gap:12px;margin:18px 24px 0;padding:14px;border-radius:18px;background:rgba(255,255,255,.5)}
+.pass-card.open .pass-more{display:grid;animation:uaPanelIn .35s ease-out}
+.pass-ticker{margin-top:24px;overflow:hidden;white-space:nowrap;padding:9px 0;background:linear-gradient(90deg,#a6ee94,#8ed6d2)}
+.pass-ticker-in{display:inline-block;font-size:15px;font-weight:600;animation:passTick 24s linear infinite}
+.pass-ticker-in span{display:inline-block}
+@keyframes passTick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.pass-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:16px 24px 24px}
+.pass-name{font-size:23px;font-weight:500;text-transform:uppercase;line-height:1.15;word-break:break-word}
+.pass-dots{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:none;background:#000;color:#fff;font-size:20px;font-weight:900;line-height:1;letter-spacing:1px;padding-bottom:6px;cursor:pointer;transition:.25s}
+.pass-dots:hover{transform:scale(1.1)}
+
+@media (max-width:600px){
+  #diiaModal .modal-box.diia-box{height:92vh;border-radius:30px}
+  .pass-photo{width:98px;height:130px}
+  .pass-title{font-size:18px}.pass-name{font-size:19px}.pass-row b{font-size:14px}
+  .pass-body,.pass-top,.pass-bottom{padding-left:18px;padding-right:18px}
+  .pass-more{margin-left:18px;margin-right:18px}
+}
+/* ===== ПАРОЛЬ (PIN) ===== */
+.pin-dots{display:flex;justify-content:center;gap:16px;margin:22px 0 28px}
+.pin-dots i{width:16px;height:16px;border-radius:50%;border:2px solid #000;transition:.2s}
+.pin-dots i.on{background:#000;transform:scale(1.15)}
+.pin-dots.shake{animation:pinShake .45s}
+.pin-dots.shake i{border-color:#d9372b;background:#d9372b}
+@keyframes pinShake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+.pin-pad{display:grid;grid-template-columns:repeat(3,74px);gap:14px 22px;justify-content:center;margin-bottom:12px}
+.pin-pad button{width:74px;height:74px;border-radius:50%;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85);
+  backdrop-filter:blur(10px);color:#000;font-size:28px;font-weight:500;cursor:pointer;transition:.15s}
+.pin-pad button:hover{background:rgba(255,255,255,.8)}
+.pin-pad button:active{background:#000;color:#fff;transform:scale(.92)}
+.pin-pad button i{font-size:22px}
+
+/* ===== БАЗА ДАНИХ ===== */
+.dq-seg4{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px;border-radius:16px;background:rgba(255,255,255,.5);margin-bottom:14px}
+.dq-seg4 button{padding:10px 2px;border:none;border-radius:12px;background:transparent;color:#000;font-weight:700;font-size:10.5px;cursor:pointer;transition:.25s}
+.dq-seg4 button.on{background:#000;color:#fff}
+.dq-un{color:#0b5ed7;text-transform:none;letter-spacing:0}
+
+/* ===== ПРИВІТАННЯ ПІСЛЯ РЕЄСТРАЦІЇ ===== */
+.welcome-box{max-width:520px!important;padding:38px 30px 30px!important;overflow:hidden}
+.welcome-box::before{content:'';position:absolute;top:0;left:12%;right:12%;height:2px;background:linear-gradient(90deg,transparent,var(--gold-light),transparent)}
+.welcome-box::after{content:'';position:absolute;top:0;left:-70%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);transform:skewX(-20deg);animation:roleShine 6s infinite;pointer-events:none}
+.welcome-crown{width:78px;height:78px;margin:0 auto 14px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:34px;color:#0c0a08;
+  background:linear-gradient(135deg,var(--gold-light),#d48312);box-shadow:0 10px 30px rgba(243,168,46,.55);animation:cookieCrack .8s ease-out}
+.welcome-kicker{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:800}
+.welcome-title{font-family:'Cinzel',serif;font-size:clamp(24px,5vw,32px);font-weight:900;text-transform:uppercase;line-height:1.2;margin:8px 0 14px;color:#fff}
+.welcome-title span{background:linear-gradient(135deg,#bf953f,#fcf6ba,#ffd700,#b38728);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.welcome-text{font-size:13px;line-height:1.7;color:#cfcfcf;margin-bottom:18px}
+.welcome-secure{display:flex;gap:14px;text-align:left;padding:16px;border-radius:16px;margin-bottom:20px;
+  background:linear-gradient(135deg,rgba(46,204,113,.13),rgba(46,204,113,.04));border:1px solid rgba(46,204,113,.5)}
+.welcome-secure>i{font-size:30px;color:#2ecc71;flex:0 0 auto;margin-top:2px}
+.welcome-secure b{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:#fff;margin-bottom:5px}
+.welcome-secure p{font-size:12px;line-height:1.6;color:#bfe9cf}
+
+/* ===== ПРОПОЗИЦІЯ ПАСПОРТА ===== */
+.ask-box{max-width:420px!important}
+.ask-logo{width:84px;height:84px;border-radius:50%;border:3px solid #fff;object-fit:cover;margin-bottom:14px;box-shadow:0 0 30px rgba(255,255,255,.35);animation:cookieCrack .7s ease-out}
