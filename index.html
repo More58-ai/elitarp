@@ -80,7 +80,9 @@
                     <input type="number" id="reg-age" class="auth-input" placeholder="Введіть ваш вік"></div>
             </div>
             <button class="btn-auth-main" onclick="handleRegister()"><i class="fa-solid fa-user-plus"></i> Зареєструватись</button>
+
         </div>
+        <div class="auth-note"><i class="fa-solid fa-lock"></i> Ваші дані захищені та не передаються третім особам.</div>
     </div>
 </div>
 
@@ -223,6 +225,28 @@
     <div class="floating-chat-btn" onclick="openTechChatModal()" title="Зв'язатися з техпідтримкою">
         <i class="fa-solid fa-headset"></i>
     </div>
+    <!-- КНОПКА ДІЇ -->
+<div class="floating-diia-btn" id="diia-fab" onclick="openDiiaModal()" title="Дія">
+    <img src="https://i.postimg.cc/XYT1LB0m/DIA.png" alt="Дія">
+</div>
+
+<!-- МОДАЛКА ДІЇ -->
+<div id="diiaModal" class="modal-overlay" onclick="if(event.target===this)closeM('diiaModal')">
+    <div class="modal-box diia-box">
+        <button class="modal-close" onclick="closeM('diiaModal')">&times;</button>
+        <div class="diia-bg"></div>
+        <div class="diia-top">
+            <img src="https://i.postimg.cc/XYT1LB0m/DIA.png" alt="">
+            <div><b>Дія</b><small>Elite RP · Документи</small></div>
+        </div>
+        <div id="diia-body" class="diia-body"></div>
+        <div class="diia-tabs" id="diia-tabs">
+            <button data-t="docs" onclick="diiaGo('docs')"><i class="fa-solid fa-id-card"></i><span>Документи</span></button>
+            <button data-t="services" onclick="diiaGo('services')"><i class="fa-solid fa-bolt"></i><span>Сервіси</span></button>
+            <button data-t="menu" onclick="diiaGo('menu')"><i class="fa-solid fa-circle-user"></i><span>Меню</span></button>
+        </div>
+    </div>
+</div>
 
     <!-- МОДАЛЬНЕ ВІКНО КЕРУВАННЯ АКАУНТОМ -->
     <div id="accountModal" class="modal-overlay" onclick="closeAccountModalOutside(event)">
@@ -648,6 +672,33 @@
         <div id="ruleModalBody"></div>
     </div>
 </div>
+<!-- ПРИВІТАННЯ ПІСЛЯ РЕЄСТРАЦІЇ -->
+<div id="welcomeModal" class="modal-overlay" style="z-index:10000">
+    <div class="modal-box welcome-box">
+        <div class="welcome-crown"><i class="fa-solid fa-crown"></i></div>
+        <div class="welcome-kicker">Реєстрацію завершено</div>
+        <div class="welcome-title">Ласкаво просимо<br>до <span>Elite RP</span>!</div>
+        <p class="welcome-text">Elite RP — реалістичне рольове місто в Roblox: поліція, медики, цивільні та кримінал. На сайті ви знайдете правила, фракції, анкети, техпідтримку та власний паспорт громадянина в застосунку «Дія».</p>
+        <div class="welcome-secure">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div><b>Ваші дані під захистом</b>
+                <p>Усі дані, які ви вказуєте на сайті, використовуються лише в межах проєкту Elite RP і не передаються третім особам. Доступ до них мають тільки уповноважені співробітники. Ніколи й нікому не передавайте свій пароль, навіть адміністрації.</p></div>
+        </div>
+        <button class="btn-auth-main" onclick="closeWelcome()"><i class="fa-solid fa-right-to-bracket"></i> Увійти на сайт</button>
+    </div>
+</div>
+
+<!-- ПРОПОЗИЦІЯ СТВОРИТИ ПАСПОРТ -->
+<div id="diiaAskModal" class="modal-overlay" style="z-index:6000" onclick="if(event.target===this)closeM('diiaAskModal')">
+    <div class="modal-box ask-box">
+        <button class="modal-close" onclick="closeM('diiaAskModal')">&times;</button>
+        <img class="ask-logo" src="https://i.postimg.cc/XYT1LB0m/DIA.png" alt="">
+        <div class="modal-title">Створіть паспорт</div>
+        <p class="modal-text" style="text-align:center">У вас ще немає паспорта громадянина Elite RP. Створіть його в застосунку «Дія»: заповніть анкету й поставте підпис.</p>
+        <button class="btn-auth-main" onclick="diiaAskNow()"><i class="fa-solid fa-id-card"></i> Створити паспорт</button>
+        <button class="btn-auth-switch" onclick="closeM('diiaAskModal')">Пізніше</button>
+    </div>
+</div>
     <!-- SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
@@ -674,6 +725,7 @@
         const ROLE_MAP = {
             player: { l: "Player", c: "role-player", icon: "🎮", rank: 1 },
             factionleader: { l: "Лідер Фракції", c: "role-factionleader", icon: "🎖️", rank: 1.5 },
+            diia: { l: "Тех.Підтримка ДІЯ", c: "role-diia", icon: "🪪", rank: 1.6 },
             trainee: { l: "Trainee", c: "role-trainee", icon: "🌱", rank: 2 },
             junioradmin: { l: "Junior Admin", c: "role-junioradmin", icon: "⭐", rank: 3 },
             admin: { l: "Admin", c: "role-admin", icon: "🛡️", rank: 4 },
@@ -854,7 +906,7 @@ function startActivityTracking(nick) {
                     glowColor: '#f3a82e'
                 });
 
-                alert("Реєстрація успішна!");
+                window._newNick = nick; showM('welcomeModal');
 switchAuthMode('login'); if (window.setAuthTab) setAuthTab('login');
             } catch (e) { console.error(e); }
         }
@@ -867,6 +919,7 @@ switchAuthMode('login'); if (window.setAuthTab) setAuthTab('login');
            
 startActivityTracking(nick);
 initExtras(nick);
+initDiia(nick);
 
            
 
@@ -1635,6 +1688,455 @@ window.setInterviewVerdict = async function(verdict) {
     closeResultChoiceModal();
     alert('Обзвон завершено!');
 };
+window.closeWelcome = function() {
+    closeM('welcomeModal');
+    if (window._newNick) $('login-nick').value = window._newNick;
+};
+window.diiaAskNow = async function() {
+    closeM('diiaAskModal');
+    await openDiiaModal();
+    diiaGo('form');
+};
+// ================= ДІЯ 2.0 =================
+let diiaIsStaff = false, diiaPending = 0, diiaUnseen = 0, myPassport = null;
+let diiaView = 'docs', diiaSel = null, diiaPad = null, diiaGender = 'Чоловіча', diiaAllOff = null, diiaTok = 0;
+let diiaDbOk = false, dbFilter = 'approved', dbQuery = '', diiaAsked = false;
+const DIIA_PIN = '0230';
+const VIEW_TAB = { docs: 'docs', services: 'services', form: 'services', list: 'services', detail: 'services', pin: 'services', db: 'services', dbdetail: 'services', menu: 'menu', sign: 'menu' };
+const fmtBirth = b => String(b || '').split('-').reverse().join('.');
+const fmtTime = t => new Date(t).toLocaleString('uk-UA');
+const diiaOpen = () => $('diiaModal').style.display === 'flex';
+const diiaIsMain = () => ['docs', 'services', 'menu'].includes(diiaView);
+const updateDiiaDot = () => setDot(document.getElementById('diia-fab'), (diiaIsStaff ? diiaPending : 0) + diiaUnseen);
+
+function diiaPaint(html) {
+    const b = $('diia-body');
+    b.innerHTML = `<div class="dq-view">${html}</div>`;
+    b.scrollTop = 0;
+    return b;
+}
+
+function initDiia(nick) {
+    onValue(ref(db, `users/${nick}/roles`), s => {
+        const r = s.exists() ? (Array.isArray(s.val()) ? s.val() : [s.val()]) : [];
+        diiaIsStaff = r.includes('diia');
+        if (diiaIsStaff && !diiaAllOff) {
+            diiaAllOff = onValue(ref(db, 'passports'), ps => {
+                diiaPending = Object.values(ps.val() || {}).filter(p => p.status === 'pending').length;
+                updateDiiaDot();
+                if (diiaOpen() && diiaIsMain()) renderDiia();
+            });
+        } else if (!diiaIsStaff && diiaAllOff) { diiaAllOff(); diiaAllOff = null; diiaPending = 0; }
+        updateDiiaDot();
+        if (diiaOpen() && diiaIsMain()) renderDiia();
+    });
+       onValue(ref(db, `passports/${nick}`), s => {
+        myPassport = s.val();
+        diiaUnseen = (myPassport && ['approved', 'rejected'].includes(myPassport.status) && myPassport.notified === false) ? 1 : 0;
+        updateDiiaDot();
+        if (diiaOpen() && diiaIsMain()) renderDiia();
+        if (!diiaAsked) {
+            diiaAsked = true;
+            if (!myPassport) setTimeout(() => {
+                const locked = document.getElementById('interview-lock-screen').style.display === 'flex';
+                if (!myPassport && !diiaOpen() && !locked) showM('diiaAskModal');
+            }, 1800);
+        }
+    });
+}
+
+window.openDiiaModal = async function () {
+    if (!currentUserNick) return alert('Спочатку увійдіть в акаунт!');
+    diiaView = 'docs'; diiaDbOk = false;
+    showM('diiaModal');
+    renderDiia();
+    if (myPassport && ['approved', 'rejected'].includes(myPassport.status) && myPassport.notified === false)
+        await set(ref(db, `passports/${currentUserNick}/notified`), true);
+};
+window.diiaGo = v => {
+    if (!['db', 'dbdetail'].includes(v)) diiaDbOk = false;   // пароль потрібен щоразу
+    diiaView = v; renderDiia();
+};
+
+function renderDiia() {
+    const tok = ++diiaTok;
+    document.querySelectorAll('#diia-tabs button').forEach(b => b.classList.toggle('active', b.dataset.t === VIEW_TAB[diiaView]));
+    ({ docs: vDocs, services: vServices, menu: vMenu, form: vForm, sign: vSign, list: vList, detail: vDetail, pin: vPin, db: vDb, dbdetail: vDbDetail })[diiaView](tok);
+}
+
+// ---------- ДОШКА ДЛЯ ПІДПИСУ ----------
+const padHtml = () => `<div class="dq-pad"><canvas></canvas>
+    <div class="dq-pad-hint"><i class="fa-solid fa-signature"></i> Розпишіться тут</div>
+    <div class="dq-pad-line"></div>
+    <button type="button" class="dq-pad-clear"><i class="fa-solid fa-eraser"></i> Очистити</button></div>`;
+
+function mountSignPad(cv) {
+    const W = 600, H = 260;
+    cv.width = W; cv.height = H;
+    const ctx = cv.getContext('2d');
+    ctx.strokeStyle = ctx.fillStyle = '#0b0b12';
+    ctx.lineCap = ctx.lineJoin = 'round';
+    const wrap = cv.parentNode, hint = wrap.querySelector('.dq-pad-hint');
+    let down = false, last = null, pm = null, lw = 3.2, dirty = false, bb = { x1: W, y1: H, x2: 0, y2: 0 };
+    const pt = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height, t: e.timeStamp }; };
+    const grow = p => { bb.x1 = Math.min(bb.x1, p.x); bb.y1 = Math.min(bb.y1, p.y); bb.x2 = Math.max(bb.x2, p.x); bb.y2 = Math.max(bb.y2, p.y); };
+
+    cv.onpointerdown = e => {
+        e.preventDefault(); cv.setPointerCapture(e.pointerId);
+        down = true; last = pt(e); pm = last; lw = 3.2; dirty = true;
+        if (hint) hint.style.opacity = 0;
+        ctx.beginPath(); ctx.arc(last.x, last.y, 1.8, 0, Math.PI * 2); ctx.fill(); grow(last);
+    };
+    cv.onpointermove = e => {
+        if (!down) return; e.preventDefault();
+        const p = pt(e);
+        const v = Math.hypot(p.x - last.x, p.y - last.y) / Math.max(1, p.t - last.t);   // швидкість → товщина лінії
+        lw = lw * .7 + Math.max(1.6, Math.min(4.6, 4.8 - v * 1.6)) * .3;
+        const m = { x: (last.x + p.x) / 2, y: (last.y + p.y) / 2 };
+        ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(pm.x, pm.y);
+        ctx.quadraticCurveTo(last.x, last.y, m.x, m.y); ctx.stroke();
+        pm = m; last = p; grow(p);
+    };
+    cv.onpointerup = cv.onpointercancel = () => { down = false; };
+    wrap.querySelector('.dq-pad-clear').onclick = () => {
+        ctx.clearRect(0, 0, W, H); dirty = false; bb = { x1: W, y1: H, x2: 0, y2: 0 };
+        if (hint) hint.style.opacity = 1;
+    };
+    return {
+        data() {      // PNG з прозорим фоном, обрізаний по підпису
+            if (!dirty || bb.x2 - bb.x1 < 40) return null;
+            const pad = 12, x = Math.max(0, bb.x1 - pad), y = Math.max(0, bb.y1 - pad);
+            const w = Math.min(W, bb.x2 + pad) - x, h = Math.min(H, bb.y2 + pad) - y, s = Math.min(1, 360 / w);
+            const o = document.createElement('canvas'); o.width = Math.round(w * s); o.height = Math.round(h * s);
+            o.getContext('2d').drawImage(cv, x, y, w, h, 0, 0, o.width, o.height);
+            return o.toDataURL('image/png');
+        }
+    };
+}
+
+// ---------- 3D-нахил картки ----------
+function tiltCard(el) {
+    if (!el) return;
+    el.onpointermove = e => {
+        const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        el.style.setProperty('--rx', ((.5 - y) * 10).toFixed(2) + 'deg');
+        el.style.setProperty('--ry', ((x - .5) * 12).toFixed(2) + 'deg');
+        el.style.setProperty('--mx', (x * 100) + '%'); el.style.setProperty('--my', (y * 100) + '%');
+    };
+    el.onpointerleave = () => { el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); };
+}
+
+// ---------- ПАСПОРТ ----------
+function passportHtml(p, ava, sign) {
+    const n = new Date();
+    const upd = `Документ оновлено о ${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')} | ${n.toLocaleDateString('uk-UA')}`;
+    const tick = `<span>${upd} &nbsp;•&nbsp; </span>`.repeat(4);
+    const sig = sign
+        ? `<img class="pass-sign-img" src="${esc(sign)}" alt="">`
+        : `<div class="pass-sign">${esc((p.roblox || '').split(/[\s(]/)[0])}</div>`;
+    return `<div class="pass-card">
+        <div class="pass-top">
+            <div class="pass-title">Паспорт громадянина<br>Elite RP</div>
+            <div class="pass-crest"><i class="fa-solid fa-crown"></i></div>
+        </div>
+        <div class="pass-body">
+            <img class="pass-photo" src="${esc(ava || DEFAULT_AVATAR)}" alt="">
+            <div class="pass-data">
+                <div class="pass-row"><small>Дата народження:</small><b>${fmtBirth(p.birth)}</b></div>
+                <div class="pass-row"><small>Номер:</small><b>${esc(p.number)}</b></div>
+                ${sig}
+            </div>
+        </div>
+             <div class="pass-more">
+            <div class="pass-row"><small>Стать:</small><b>${esc(p.gender)}</b></div>
+            <div class="pass-row"><small>Місце народження:</small><b>${esc(p.city)}</b></div>
+            <div class="pass-row"><small>Roblox:</small><b>${esc(p.roblox)}</b></div>
+            <div class="pass-row"><small>Видано:</small><b>${new Date(p.issuedAt).toLocaleDateString('uk-UA')}</b></div>
+            <div class="pass-row" style="grid-column:1/-1"><small>Видав паспорт:</small><b>${esc(p.decidedBy || '—')} · Дія Elite RP</b></div>
+        </div>
+        <div class="pass-ticker"><div class="pass-ticker-in">${tick}${tick}</div></div>
+        <div class="pass-bottom">
+            <div class="pass-name">${esc(p.fullName)}</div>
+            <button type="button" class="pass-dots" onclick="this.closest('.pass-card').classList.toggle('open')">···</button>
+        </div>
+    </div>`;
+}
+
+// ---------- ВКЛАДКА: ДОКУМЕНТИ ----------
+async function vDocs(tok) {
+    const p = myPassport;
+    if (p && p.status === 'approved') {
+        const [u, sg] = await Promise.all([get(ref(db, `users/${currentUserNick}`)), get(ref(db, `passport_signs/${currentUserNick}`))]);
+        if (tok !== diiaTok) return;
+        const b = diiaPaint(`<div class="dq-h">Документи</div>${passportHtml(p, (u.val() || {}).avatar, sg.val())}
+            <div class="dq-hint">Нахиляйте картку та натискайте <b>···</b>, щоб побачити більше</div>`);
+        return tiltCard(b.querySelector('.pass-card'));
+    }
+    let h = '<div class="dq-h">Документи</div>';
+    if (p && p.status === 'pending') {
+        h += `<div class="dq-card dq-empty"><i class="fa-solid fa-hourglass-half" style="color:#c99700"></i>
+            <h3>Запит на розгляді</h3><p>Співробітники Дії перевіряють вашу анкету. Ви отримаєте сповіщення про рішення.</p>
+            <div class="dq-kv" style="text-align:left"><small>ПІБ</small><b>${esc(p.fullName)}</b></div>
+            <div class="dq-kv" style="text-align:left"><small>Подано</small><b>${fmtTime(p.time)}</b></div></div>`;
+    } else if (p && p.status === 'rejected') {
+        h += `<div class="dq-card dq-empty"><i class="fa-solid fa-circle-xmark" style="color:#d9372b"></i>
+            <h3>Запит відхилено</h3>
+            <div class="dq-reason"><b>Причина:</b><br>${esc(p.reason || 'Не вказано')}</div>
+            <button class="dq-btn" onclick="diiaGo('form')"><i class="fa-solid fa-file-pen"></i> Подати нову анкету</button></div>`;
+    } else {
+        h += `<div class="dq-card dq-empty"><i class="fa-solid fa-id-card"></i>
+            <h3>Паспорта ще немає</h3><p>Створіть паспорт громадянина Elite RP: заповніть анкету та поставте підпис.</p>
+            <button class="dq-btn" onclick="diiaGo('form')"><i class="fa-solid fa-file-pen"></i> Подати анкету на створення паспорта</button></div>`;
+    }
+    diiaPaint(h);
+}
+
+// ---------- ВКЛАДКА: СЕРВІСИ ----------
+function vServices() {
+    const p = myPassport;
+    const st = !p ? ['Немає', 'none'] : p.status === 'approved' ? ['Активний', 'ok'] : p.status === 'pending' ? ['На розгляді', 'wait'] : ['Відхилено', 'bad'];
+    const go = p && ['approved', 'pending'].includes(p.status) ? 'docs' : 'form';
+    diiaPaint(`<div class="dq-h">Сервіси</div>
+        <div class="dq-svc" onclick="diiaGo('${go}')"><span class="dq-ico"><i class="fa-solid fa-id-card"></i></span>
+            <div><b>Паспорт громадянина</b><small>Створення та перегляд документа</small></div><span class="dq-chip ${st[1]}">${st[0]}</span></div>
+        ${diiaIsStaff ? `<div class="dq-svc staff" onclick="diiaGo('list')"><span class="dq-ico"><i class="fa-solid fa-inbox"></i></span>
+            <div><b>Запити</b><small>Анкети на створення паспортів</small></div><span class="dq-count">${diiaPending}</span></div>
+        <div class="dq-svc staff" onclick="diiaGo('pin')"><span class="dq-ico"><i class="fa-solid fa-database"></i></span>
+            <div><b>База даних</b><small>Усі паспорти громадян · потрібен пароль</small></div><i class="fa-solid fa-lock" style="opacity:.5"></i></div>` : ''}
+        <div class="dq-svc off"><span class="dq-ico"><i class="fa-solid fa-car"></i></span>
+            <div><b>Посвідчення водія</b><small>Незабаром у Дії</small></div><span class="dq-chip none">Скоро</span></div>
+        <div class="dq-svc off"><span class="dq-ico"><i class="fa-solid fa-house"></i></span>
+            <div><b>Реєстрація місця проживання</b><small>Незабаром у Дії</small></div><span class="dq-chip none">Скоро</span></div>`);
+}
+
+// ---------- ВКЛАДКА: МЕНЮ ----------
+async function vMenu(tok) {
+    const [u, sg] = await Promise.all([get(ref(db, `users/${currentUserNick}`)), get(ref(db, `passport_signs/${currentUserNick}`))]);
+    if (tok !== diiaTok) return;
+    const x = u.val() || {}, p = myPassport, sign = sg.val();
+    const canSign = p && p.status !== 'rejected';
+    diiaPaint(`<div class="dq-h">Меню</div>
+        <div class="dq-card dq-prof"><img class="dq-ava big" src="${esc(x.avatar || DEFAULT_AVATAR)}">
+            <div><b>${esc(currentUserNick)}</b><div style="margin-top:4px">${rolesHtmlOf(x.roles)}</div></div></div>
+        <div class="dq-card"><div class="dq-cap">Мій підпис</div>
+            ${sign ? `<img class="dq-sigprev" src="${esc(sign)}" alt="">` : '<div class="dq-muted">Підпис ще не створено</div>'}
+            ${canSign ? `<button class="dq-btn ghost" onclick="diiaGo('sign')"><i class="fa-solid fa-signature"></i> ${sign ? 'Змінити' : 'Намалювати'} підпис</button>` : '<div class="dq-note">Підпис можна змінити після подання анкети на паспорт.</div>'}</div>
+        <div class="dq-card">
+            <div class="dq-kv"><small>Вік на сайті</small><b>${esc(x.age || '—')}</b></div>
+            <div class="dq-kv"><small>Дата реєстрації</small><b>${x.createdAt ? fmtTime(x.createdAt) : '—'}</b></div></div>
+        <div class="dq-ver">Дія · Elite RP · v2.0</div>`);
+}
+
+function vSign() {
+    const b = diiaPaint(`<div class="dq-h">Мій підпис</div>
+        <div class="dq-sub">Намалюйте підпис пальцем або мишкою. Він з'явиться на вашому паспорті.</div>
+        <div class="dq-card">${padHtml()}</div>
+        <button class="dq-btn" id="sg-save"><i class="fa-solid fa-floppy-disk"></i> Зберегти підпис</button>
+        <button class="dq-btn ghost" onclick="diiaGo('menu')"><i class="fa-solid fa-arrow-left"></i> Назад</button>`);
+    diiaPad = mountSignPad(b.querySelector('.dq-pad canvas'));
+    b.querySelector('#sg-save').onclick = async () => {
+        const d = diiaPad.data();
+        if (!d) return alert('Намалюйте свій підпис!');
+        await set(ref(db, `passport_signs/${currentUserNick}`), d);
+        alert('Підпис збережено!');
+        diiaGo('menu');
+    };
+}
+
+// ---------- АНКЕТА НА ПАСПОРТ ----------
+function vForm() {
+    diiaGender = 'Чоловіча';
+    const b = diiaPaint(`<div class="dq-h">Створення паспорта</div>
+        <div class="dq-sub">Заповніть дані свого персонажа та поставте підпис.</div>
+        <div class="dq-card">
+                       <div class="dq-field"><label>ПІБ <span class="dq-un">(User Name)</span></label><input id="pp-name" class="dq-input" autocomplete="off" placeholder="Шевченко Тарас Григорович (User Name)">
+                <div class="dq-note"><i class="fa-solid fa-circle-info"></i> Після ПІБ у дужках вкажіть свій User Name.</div></div>
+            <div class="dq-field"><label>Нік у Roblox</label><input id="pp-roblox" class="dq-input" autocomplete="off" placeholder="username (DisplayName)">
+                <div class="dq-note"><i class="fa-solid fa-circle-info"></i> Спочатку вкажіть юзернейм у Roblox, потім дисплей нейм.</div></div>
+            <div class="dq-field"><label>Дата народження</label><input type="date" id="pp-birth" class="dq-input"></div>
+            <div class="dq-field"><label>Стать</label><div class="dq-seg">
+                <button type="button" class="on" data-g="Чоловіча">Чоловіча</button><button type="button" data-g="Жіноча">Жіноча</button></div></div>
+            <div class="dq-field" style="margin-bottom:0"><label>Місце народження (місто)</label><input id="pp-city" class="dq-input" autocomplete="off" placeholder="Наприклад: Київ"></div>
+        </div>
+        <div class="dq-card"><div class="dq-cap">Ваш підпис</div>${padHtml()}</div>
+        <button class="dq-btn" id="pp-send"><i class="fa-solid fa-paper-plane"></i> Надіслати запит</button>
+        <button class="dq-btn ghost" onclick="diiaGo('services')"><i class="fa-solid fa-arrow-left"></i> Назад</button>`);
+    diiaPad = mountSignPad(b.querySelector('.dq-pad canvas'));
+    b.querySelectorAll('.dq-seg button').forEach(btn => btn.onclick = () => {
+        diiaGender = btn.dataset.g;
+        b.querySelectorAll('.dq-seg button').forEach(x => x.classList.toggle('on', x === btn));
+    });
+    b.querySelector('#pp-send').onclick = submitPassport;
+}
+
+async function submitPassport() {
+    const d = {
+        fullName: $('pp-name').value.trim(), roblox: $('pp-roblox').value.trim(),
+        birth: $('pp-birth').value, gender: diiaGender, city: $('pp-city').value.trim()
+    };
+    if (!d.fullName || !d.roblox || !d.birth || !d.city) return alert('Заповніть усі поля анкети!');
+    if (d.fullName.split(/\s+/).length < 2) return alert('Вкажіть ПІБ повністю!');
+    if (new Date(d.birth) > new Date()) return alert('Дата народження не може бути в майбутньому!');
+    const sign = diiaPad.data();
+    if (!sign) return alert('Намалюйте свій підпис у віконці!');
+    if (myPassport && ['approved', 'pending'].includes(myPassport.status)) return alert('У вас уже є паспорт або активний запит!');
+    await set(ref(db, `passport_signs/${currentUserNick}`), sign);
+    await set(ref(db, `passports/${currentUserNick}`), {
+        nick: currentUserNick, ...d, status: 'pending', reason: '', notified: true, time: Date.now()
+    });
+    alert('Запит надіслано! Очікуйте рішення співробітників Дії.');
+    diiaGo('docs');
+}
+
+// ---------- СПІВРОБІТНИК ДІЇ ----------
+async function vList(tok) {
+    diiaPaint('<div class="dq-h">Запити</div><div class="dq-muted">Завантаження...</div>');
+    const [ps, us] = await Promise.all([get(ref(db, 'passports')), get(ref(db, 'users'))]);
+    if (tok !== diiaTok) return;
+    const users = us.val() || {};
+    const list = Object.values(ps.val() || {}).filter(p => p.status === 'pending').sort((a, b) => a.time - b.time);
+    const b = diiaPaint(`<div class="dq-h">Запити <span class="dq-count">${list.length}</span></div>
+        ${list.map(p => `<div class="dq-svc dq-req" data-n="${esc(p.nick)}">
+            <img class="dq-ava" src="${esc((users[p.nick] || {}).avatar || DEFAULT_AVATAR)}">
+            <div><b>${esc(p.fullName)}</b><small>${esc(p.nick)} · ${fmtTime(p.time)}</small></div>
+            <i class="fa-solid fa-chevron-right" style="opacity:.5"></i></div>`).join('')
+            || '<div class="dq-card dq-empty"><i class="fa-solid fa-circle-check" style="color:#1faa59"></i><h3>Нових запитів немає</h3></div>'}
+        <button class="dq-btn ghost" onclick="diiaGo('services')"><i class="fa-solid fa-arrow-left"></i> Назад</button>`);
+    b.querySelectorAll('.dq-req').forEach(el => el.onclick = () => { diiaSel = el.dataset.n; diiaGo('detail'); });
+}
+
+async function vDetail(tok) {
+    const nick = diiaSel;
+    const [ps, us, sg] = await Promise.all([get(ref(db, `passports/${nick}`)), get(ref(db, `users/${nick}`)), get(ref(db, `passport_signs/${nick}`))]);
+    if (tok !== diiaTok) return;
+    const p = ps.val();
+    if (!p || p.status !== 'pending') { alert('Цей запит уже опрацьовано.'); return diiaGo('list'); }
+    const u = us.val() || {};
+    const kv = (l, v) => `<div class="dq-kv"><small>${l}</small><b>${esc(v || '—')}</b></div>`;
+    const b = diiaPaint(`<div class="dq-h">Запит на паспорт</div>
+        <div class="dq-card"><div class="dq-cap">Акаунт</div>
+            <div class="dq-prof" style="margin-bottom:10px"><img class="dq-ava big" src="${esc(u.avatar || DEFAULT_AVATAR)}">
+                <div><b>${esc(nick)}</b><div style="margin-top:4px">${rolesHtmlOf(u.roles)}</div></div></div>
+            ${kv('Вік на сайті', u.age)}${kv('Дата реєстрації', u.createdAt ? fmtTime(u.createdAt) : '')}</div>
+        <div class="dq-card"><div class="dq-cap">Дані з анкети</div>
+            ${kv('ПІБ', p.fullName)}${kv('Roblox (юзернейм та дисплей нейм)', p.roblox)}${kv('Дата народження', fmtBirth(p.birth))}
+            ${kv('Стать', p.gender)}${kv('Місце народження', p.city)}${kv('Подано', fmtTime(p.time))}</div>
+        <div class="dq-card"><div class="dq-cap">Підпис</div>
+            ${sg.val() ? `<img class="dq-sigprev" src="${esc(sg.val())}" alt="">` : '<div class="dq-muted">Підпис не додано</div>'}</div>
+        <div class="dq-row2"><button class="dq-btn bad" id="dd-rej"><i class="fa-solid fa-xmark"></i> Відхилити</button>
+            <button class="dq-btn ok" id="dd-ok"><i class="fa-solid fa-check"></i> Підтвердити</button></div>
+        <button class="dq-btn ghost" onclick="diiaGo('list')"><i class="fa-solid fa-arrow-left"></i> До списку</button>`);
+
+    const stillPending = async () => {
+        const cur = (await get(ref(db, `passports/${nick}`))).val();
+        if (!cur || cur.status !== 'pending') { alert('Цей запит уже опрацьовано.'); diiaGo('list'); return null; }
+        return cur;
+    };
+    b.querySelector('#dd-ok').onclick = async () => {
+        const cur = await stillPending(); if (!cur) return;
+        const number = String(Math.floor(100000000 + Math.random() * 900000000));
+        await set(ref(db, `passports/${nick}`), { ...cur, status: 'approved', number, issuedAt: Date.now(), decidedBy: currentUserNick, reason: '', notified: false });
+        logAction('passport', nick, 'Схвалено паспорт громадянина');
+        diiaGo('list');
+    };
+    b.querySelector('#dd-rej').onclick = () => promptText('Причина відхилення паспорта', 'Вкажіть причину, її побачить гравець у Дії...', true, async reason => {
+        const cur = await stillPending(); if (!cur) return;
+        await set(ref(db, `passports/${nick}`), { ...cur, status: 'rejected', reason, decidedBy: currentUserNick, notified: false });
+        logAction('passport', nick, 'Відхилено паспорт. Причина: ' + reason);
+        diiaGo('list');
+    });
+}
+
+// ---------- БАЗА ДАНИХ: ПАРОЛЬ ----------
+function vPin() {
+    if (!diiaIsStaff) return diiaGo('services');
+    let code = '';
+    const b = diiaPaint(`<div class="dq-h" style="text-align:center;margin-top:18px">Введіть пароль</div>
+        <div class="dq-sub" style="text-align:center">Доступ до бази даних паспортів</div>
+        <div class="pin-dots"><i></i><i></i><i></i><i></i></div>
+        <div class="pin-pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-k="${n}">${n}</button>`).join('')}
+            <span></span><button data-k="0">0</button><button data-k="del"><i class="fa-solid fa-delete-left"></i></button></div>
+        <button class="dq-btn ghost" onclick="diiaGo('services')"><i class="fa-solid fa-arrow-left"></i> Назад</button>`);
+    const wrap = b.querySelector('.pin-dots'), dots = wrap.querySelectorAll('i');
+    const paint = () => dots.forEach((d, i) => d.classList.toggle('on', i < code.length));
+    b.querySelectorAll('.pin-pad button').forEach(btn => btn.onclick = () => {
+        if (wrap.classList.contains('shake')) return;
+        const k = btn.dataset.k;
+        if (k === 'del') code = code.slice(0, -1); else if (code.length < 4) code += k;
+        paint();
+        if (code.length < 4) return;
+        if (code === DIIA_PIN) { diiaDbOk = true; setTimeout(() => diiaGo('db'), 180); }
+        else { wrap.classList.add('shake'); setTimeout(() => { code = ''; paint(); wrap.classList.remove('shake'); }, 520); }
+    });
+}
+
+// ---------- БАЗА ДАНИХ: СПИСОК ----------
+const DB_ST = { approved: ['Активний', 'ok'], pending: ['На розгляді', 'wait'], rejected: ['Відхилено', 'bad'] };
+async function vDb(tok) {
+    if (!diiaIsStaff || !diiaDbOk) return diiaGo('services');
+    diiaPaint('<div class="dq-h">База даних</div><div class="dq-muted">Завантаження...</div>');
+    const [ps, us] = await Promise.all([get(ref(db, 'passports')), get(ref(db, 'users'))]);
+    if (tok !== diiaTok) return;
+    const users = us.val() || {};
+    const all = Object.values(ps.val() || {}).sort((a, b) => (b.issuedAt || b.time) - (a.issuedAt || a.time));
+    const cnt = s => all.filter(p => p.status === s).length;
+    const b = diiaPaint(`<div class="dq-h">База даних <span class="dq-count">${all.length}</span></div>
+        <input id="db-q" class="dq-input" placeholder="Пошук: ПІБ, нік, номер..." value="${esc(dbQuery)}" style="margin-bottom:12px">
+        <div class="dq-seg4">${[['approved', 'Видані'], ['pending', 'Очікують'], ['rejected', 'Відхилені'], ['all', 'Усі']]
+            .map(([k, l]) => `<button data-f="${k}">${l}${k !== 'all' ? ` (${cnt(k)})` : ''}</button>`).join('')}</div>
+        <div id="db-rows"></div>
+        <button class="dq-btn ghost" onclick="diiaGo('services')"><i class="fa-solid fa-arrow-left"></i> Назад</button>`);
+    const rows = b.querySelector('#db-rows');
+    const draw = () => {
+        const q = dbQuery.toLowerCase().trim();
+        const list = all.filter(p => (dbFilter === 'all' || p.status === dbFilter) &&
+            (!q || [p.fullName, p.nick, p.number, p.roblox].some(x => String(x || '').toLowerCase().includes(q))));
+        rows.innerHTML = list.map(p => {
+            const st = DB_ST[p.status] || DB_ST.pending;
+            return `<div class="dq-svc dq-req" data-n="${esc(p.nick)}">
+                <img class="dq-ava" src="${esc((users[p.nick] || {}).avatar || DEFAULT_AVATAR)}">
+                <div><b>${esc(p.fullName)}</b><small>${esc(p.nick)}${p.number ? ' · № ' + esc(p.number) : ''}</small></div>
+                <span class="dq-chip ${st[1]}">${st[0]}</span></div>`;
+        }).join('') || '<div class="dq-muted" style="text-align:center;padding:20px">Нічого не знайдено</div>';
+        rows.querySelectorAll('.dq-req').forEach(el => el.onclick = () => { diiaSel = el.dataset.n; diiaGo('dbdetail'); });
+        b.querySelectorAll('.dq-seg4 button').forEach(x => x.classList.toggle('on', x.dataset.f === dbFilter));
+    };
+    b.querySelector('#db-q').oninput = e => { dbQuery = e.target.value; draw(); };
+    b.querySelectorAll('.dq-seg4 button').forEach(x => x.onclick = () => { dbFilter = x.dataset.f; draw(); });
+    draw();
+}
+
+// ---------- БАЗА ДАНИХ: КАРТКА ГРАВЦЯ ----------
+async function vDbDetail(tok) {
+    if (!diiaIsStaff || !diiaDbOk) return diiaGo('services');
+    const nick = diiaSel;
+    const [ps, us, sg] = await Promise.all([get(ref(db, `passports/${nick}`)), get(ref(db, `users/${nick}`)), get(ref(db, `passport_signs/${nick}`))]);
+    if (tok !== diiaTok) return;
+    const p = ps.val();
+    if (!p) { alert('Запис не знайдено.'); return diiaGo('db'); }
+    const u = us.val() || {}, st = DB_ST[p.status] || DB_ST.pending;
+    const kv = (l, v) => `<div class="dq-kv"><small>${l}</small><b>${esc(v || '—')}</b></div>`;
+    const b = diiaPaint(`<div class="dq-h">Паспорт гравця</div>
+        ${p.status === 'approved' ? passportHtml(p, u.avatar, sg.val()) : ''}
+        <div class="dq-card" style="margin-top:14px"><div class="dq-cap">Акаунт</div>
+            <div class="dq-prof" style="margin-bottom:10px"><img class="dq-ava big" src="${esc(u.avatar || DEFAULT_AVATAR)}">
+                <div><b>${esc(nick)}</b><div style="margin-top:4px">${rolesHtmlOf(u.roles)}</div></div></div>
+            ${kv('Вік на сайті', u.age)}${kv('Дата реєстрації', u.createdAt ? fmtTime(u.createdAt) : '')}</div>
+        <div class="dq-card"><div class="dq-cap">Дані паспорта <span class="dq-chip ${st[1]}" style="margin-left:6px">${st[0]}</span></div>
+            ${kv('ПІБ', p.fullName)}${kv('Roblox', p.roblox)}${kv('Дата народження', fmtBirth(p.birth))}
+            ${kv('Стать', p.gender)}${kv('Місце народження', p.city)}${p.number ? kv('Номер', p.number) : ''}
+            ${kv('Подано', fmtTime(p.time))}
+            ${p.issuedAt ? kv('Видано', fmtTime(p.issuedAt)) : ''}
+            ${p.decidedBy ? kv(p.status === 'approved' ? 'Видав паспорт' : 'Рішення ухвалив', p.decidedBy) : ''}
+            ${p.status === 'rejected' ? kv('Причина відхилення', p.reason) : ''}</div>
+        <div class="dq-card"><div class="dq-cap">Підпис</div>
+            ${sg.val() ? `<img class="dq-sigprev" src="${esc(sg.val())}" alt="">` : '<div class="dq-muted">Підпис не додано</div>'}</div>
+        ${p.status === 'pending' ? '<button class="dq-btn ok" id="db-open"><i class="fa-solid fa-clipboard-check"></i> Розглянути запит</button>' : ''}
+        <button class="dq-btn ghost" onclick="diiaGo('db')"><i class="fa-solid fa-arrow-left"></i> До бази</button>`);
+    tiltCard(b.querySelector('.pass-card'));
+    const o = b.querySelector('#db-open'); if (o) o.onclick = () => diiaGo('detail');
+}
+
        document.addEventListener('DOMContentLoaded', () => {
     // 1. Блокування контекстного меню (права кнопка миші)
     document.addEventListener('contextmenu', (e) => {
