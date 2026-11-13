@@ -1517,3 +1517,68 @@ html,body{overflow-x:hidden;max-width:100vw}
 /* ===== ПРОПОЗИЦІЯ ПАСПОРТА ===== */
 .ask-box{max-width:420px!important}
 .ask-logo{width:84px;height:84px;border-radius:50%;border:3px solid #fff;object-fit:cover;margin-bottom:14px;box-shadow:0 0 30px rgba(255,255,255,.35);animation:cookieCrack .7s ease-out}
+/* ===== ДІЯ: ближче до оригіналу ===== */
+#diiaModal .modal-box.diia-box{
+  background:linear-gradient(170deg,#a9d3e6 0%,#c9e3d6 38%,#b7e1a8 70%,#8fd0c4 100%)!important;
+  border-radius:42px}
+.diia-top{padding:26px 24px 4px}
+.diia-top img{width:40px;height:40px;border:none;box-shadow:none;background:#000}
+.diia-top b{font-size:26px;font-weight:700;letter-spacing:-.6px}
+.diia-top small{display:none}
+.dq-h{font-size:30px;font-weight:500;letter-spacing:-.6px}
+
+/* картка-паспорт: світліша, з "стопкою" документів позаду */
+.pass-card{
+  background:linear-gradient(135deg,rgba(247,250,236,.92),rgba(206,230,242,.85));
+  border-radius:34px;margin-bottom:26px}
+.pass-card::marker{display:none}
+.dq-view .pass-card{box-shadow:0 26px 50px rgba(0,0,0,.25),
+  0 14px 0 -6px rgba(255,255,255,.55),
+  0 26px 0 -12px rgba(255,255,255,.35),
+  inset 0 1px 0 rgba(255,255,255,.95)}
+.pass-title{font-weight:400;font-size:22px;line-height:1.18}
+.pass-row small{font-weight:400;color:rgba(0,0,0,.65)}
+.pass-row b{font-weight:500}
+.pass-photo{border-radius:22px;width:120px;height:160px}
+.pass-name{font-weight:400;font-size:24px;letter-spacing:.2px}
+.pass-ticker-in{font-weight:500;font-size:14px}
+.pass-dots{width:46px;height:46px;font-size:22px}
+
+/* нижня панель як у Дії */
+.diia-tabs{border-radius:30px 30px 0 0;padding-top:10px}
+.diia-tabs button{font-size:11px;font-weight:500;gap:5px}
+.diia-tabs button i{width:56px;height:34px;border-radius:17px;font-size:19px}
+
+/* сервіси: плоскіші, світліші */
+.dq-svc{border-radius:24px;background:rgba(255,255,255,.55)}
+.dq-ico{border-radius:50%;width:48px;height:48px}
+/* ===== РОЛЬ: КУРАТОР АДМІНІСТРАЦІЇ ===== */
+@keyframes curatorFlow{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@keyframes curatorAura{
+  0%,100%{box-shadow:0 0 8px rgba(255,215,0,.7),0 0 18px rgba(200,30,70,.65),0 0 32px rgba(255,215,0,.3),inset 0 1px 0 rgba(255,255,255,.6)}
+  50%{box-shadow:0 0 14px rgba(255,235,140,1),0 0 30px rgba(230,40,90,.9),0 0 56px rgba(255,215,0,.5),inset 0 1px 0 rgba(255,255,255,.8)}
+}
+@keyframes curatorSpark{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1) rotate(180deg)}}
+
+.role-curator{
+  background:linear-gradient(110deg,#5a0620,#b3123c,#ffd76a,#fff6cf,#ffd76a,#b3123c,#5a0620)!important;
+  background-size:300% 100%!important;
+  color:#2a0510!important;
+  font-weight:900!important;
+  letter-spacing:.9px!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.55);
+  border:1px solid #fff0a8!important;
+  padding:4px 14px!important;
+  animation:curatorFlow 5s linear infinite,curatorAura 2.4s ease-in-out infinite!important;
+  overflow:visible!important;
+}
+/* блиск, що пробігає (перекриває стандартний) */
+.role-curator::after{
+  content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent);
+  transform:skewX(-20deg);animation:roleShine 2.8s infinite;border-radius:inherit;pointer-events:none}
+/* іскри */
+.role-curator::before{
+  content:'✦';position:absolute;top:-7px;right:-4px;font-size:11px;color:#fff6cf;
+  text-shadow:0 0 8px #ffd76a,0 0 14px #ff3b6b;animation:curatorSpark 2.2s ease-in-out infinite;pointer-events:none}
+  
