@@ -733,6 +733,7 @@
             headadmin: { l: "Head Admin", c: "role-headadmin", icon: "👑", rank: 6 },
             deputyheadadmin: { l: "Deputy Head Admin", c: "role-deputyheadadmin", icon: "⚡", rank: 7 },
             deputyowner: { l: "Deputy Owner", c: "role-deputyowner", icon: "💎", rank: 8 },
+            curator: { l: "Куратор Адміністрації", c: "role-curator", icon: "🔱", rank: 8.5 },
             techadmin: { l: "Tech Admin", c: "role-techadmin", icon: "🔧", rank: 9 },
             owner: { l: "Owner", c: "role-owner", icon: "🌟", rank: 10 }
         };
@@ -948,7 +949,7 @@ initDiia(nick);
                         const rm = ROLE_MAP[rKey] || ROLE_MAP['player'];
                         rolesHtml += `<span class="role-badge ${rm.c}">${rm.icon} ${rm.l}</span>`;
                         if (rKey === 'techadmin') isTechAdmin = true;
-                        if (['headadmin', 'deputyheadadmin', 'senioradmin', 'admin', 'junioradmin', 'trainee', 'deputyowner', 'techadmin', 'owner'].includes(rKey)) isHighAdmin = true;
+                       if (['headadmin', 'deputyheadadmin', 'senioradmin', 'admin', 'junioradmin', 'trainee', 'deputyowner', 'curator', 'techadmin', 'owner'].includes(rKey)) isHighAdmin = true;
                     });
 
                     document.getElementById('header-roles-box').innerHTML = rolesHtml;
@@ -1602,9 +1603,9 @@ function initExtras(nick) {
         const r = s.exists() ? (Array.isArray(s.val()) ? s.val() : [s.val()]) : [];
         const has = list => r.some(x => list.includes(x));
         document.getElementById('btn-ihistory').style.display =
-            has(['trainee','junioradmin','admin','senioradmin','headadmin','deputyheadadmin','deputyowner','techadmin','owner']) ? 'inline-flex' : 'none';
+           has(['trainee','junioradmin','admin','senioradmin','headadmin','deputyheadadmin','deputyowner','curator','techadmin','owner'])
         document.getElementById('btn-journal').style.display =
-            has(['admin','senioradmin','headadmin','deputyheadadmin','deputyowner','techadmin','owner']) ? 'inline-flex' : 'none';
+            has(['admin','senioradmin','headadmin','deputyheadadmin','deputyowner','curator','techadmin','owner'])
     });
 }
 
@@ -1850,13 +1851,14 @@ function passportHtml(p, ava, sign) {
              <div class="pass-more">
             <div class="pass-row"><small>Стать:</small><b>${esc(p.gender)}</b></div>
             <div class="pass-row"><small>Місце народження:</small><b>${esc(p.city)}</b></div>
-            <div class="pass-row"><small>Roblox:</small><b>${esc(p.roblox)}</b></div>
+            <div class="pass-row"><small>@username:</small><b>${esc(p.fullName)}</b></div>
+<div class="pass-row"><small>DisplayName:</small><b>${esc(p.roblox)}</b></div>
             <div class="pass-row"><small>Видано:</small><b>${new Date(p.issuedAt).toLocaleDateString('uk-UA')}</b></div>
             <div class="pass-row" style="grid-column:1/-1"><small>Видав паспорт:</small><b>${esc(p.decidedBy || '—')} · Дія Elite RP</b></div>
         </div>
         <div class="pass-ticker"><div class="pass-ticker-in">${tick}${tick}</div></div>
         <div class="pass-bottom">
-            <div class="pass-name">${esc(p.fullName)}</div>
+            <div class="pass-name">${esc(p.roblox)}</div>
             <button type="button" class="pass-dots" onclick="this.closest('.pass-card').classList.toggle('open')">···</button>
         </div>
     </div>`;
@@ -1869,14 +1871,19 @@ async function vDocs(tok) {
         const [u, sg] = await Promise.all([get(ref(db, `users/${currentUserNick}`)), get(ref(db, `passport_signs/${currentUserNick}`))]);
         if (tok !== diiaTok) return;
         const b = diiaPaint(`<div class="dq-h">Документи</div>${passportHtml(p, (u.val() || {}).avatar, sg.val())}
-            <div class="dq-hint">Нахиляйте картку та натискайте <b>···</b>, щоб побачити більше</div>`);
+            <div class="dq-hint" style="display:flex;justify-content:center;gap:6px;align-items:center">
+  <i style="width:8px;height:8px;border-radius:50%;background:#000"></i>
+  <i style="width:8px;height:8px;border-radius:50%;background:rgba(0,0,0,.25)"></i>
+  <i style="width:8px;height:8px;border-radius:50%;background:rgba(0,0,0,.25)"></i>
+</div>
+<div class="dq-hint">Натисніть <b>···</b>, щоб побачити більше</div>`);
         return tiltCard(b.querySelector('.pass-card'));
     }
     let h = '<div class="dq-h">Документи</div>';
     if (p && p.status === 'pending') {
         h += `<div class="dq-card dq-empty"><i class="fa-solid fa-hourglass-half" style="color:#c99700"></i>
             <h3>Запит на розгляді</h3><p>Співробітники Дії перевіряють вашу анкету. Ви отримаєте сповіщення про рішення.</p>
-            <div class="dq-kv" style="text-align:left"><small>ПІБ</small><b>${esc(p.fullName)}</b></div>
+            <div class="dq-kv" style="text-align:left"><small>@username</small><b>${esc(p.fullName)}</b></div>
             <div class="dq-kv" style="text-align:left"><small>Подано</small><b>${fmtTime(p.time)}</b></div></div>`;
     } else if (p && p.status === 'rejected') {
         h += `<div class="dq-card dq-empty"><i class="fa-solid fa-circle-xmark" style="color:#d9372b"></i>
@@ -1949,10 +1956,10 @@ function vForm() {
     const b = diiaPaint(`<div class="dq-h">Створення паспорта</div>
         <div class="dq-sub">Заповніть дані свого персонажа та поставте підпис.</div>
         <div class="dq-card">
-                       <div class="dq-field"><label>ПІБ <span class="dq-un">(User Name)</span></label><input id="pp-name" class="dq-input" autocomplete="off" placeholder="Шевченко Тарас Григорович (User Name)">
-                <div class="dq-note"><i class="fa-solid fa-circle-info"></i> Після ПІБ у дужках вкажіть свій User Name.</div></div>
-            <div class="dq-field"><label>Нік у Roblox</label><input id="pp-roblox" class="dq-input" autocomplete="off" placeholder="username (DisplayName)">
-                <div class="dq-note"><i class="fa-solid fa-circle-info"></i> Спочатку вкажіть юзернейм у Roblox, потім дисплей нейм.</div></div>
+                       <div class="dq-field"><label>@username</label><input id="pp-name" class="dq-input" autocomplete="off" placeholder="@username">
+    <div class="dq-note"><i class="fa-solid fa-circle-info"></i> Ваш юзернейм у Roblox.</div></div>
+<div class="dq-field"><label>DisplayName</label><input id="pp-roblox" class="dq-input" autocomplete="off" placeholder="DisplayName">
+    <div class="dq-note"><i class="fa-solid fa-circle-info"></i> Ваш відображуваний нік у Roblox.</div></div>
             <div class="dq-field"><label>Дата народження</label><input type="date" id="pp-birth" class="dq-input"></div>
             <div class="dq-field"><label>Стать</label><div class="dq-seg">
                 <button type="button" class="on" data-g="Чоловіча">Чоловіча</button><button type="button" data-g="Жіноча">Жіноча</button></div></div>
@@ -1971,11 +1978,12 @@ function vForm() {
 
 async function submitPassport() {
     const d = {
-        fullName: $('pp-name').value.trim(), roblox: $('pp-roblox').value.trim(),
+        fullName: $('pp-name').value.trim().replace(/^@+/, '') ? '@' + $('pp-name').value.trim().replace(/^@+/, '') : '',
+roblox: $('pp-roblox').value.trim(),
         birth: $('pp-birth').value, gender: diiaGender, city: $('pp-city').value.trim()
     };
     if (!d.fullName || !d.roblox || !d.birth || !d.city) return alert('Заповніть усі поля анкети!');
-    if (d.fullName.split(/\s+/).length < 2) return alert('Вкажіть ПІБ повністю!');
+    if (/\s/.test(d.fullName)) return alert('Юзернейм не може містити пробілів!');
     if (new Date(d.birth) > new Date()) return alert('Дата народження не може бути в майбутньому!');
     const sign = diiaPad.data();
     if (!sign) return alert('Намалюйте свій підпис у віконці!');
@@ -2019,7 +2027,7 @@ async function vDetail(tok) {
                 <div><b>${esc(nick)}</b><div style="margin-top:4px">${rolesHtmlOf(u.roles)}</div></div></div>
             ${kv('Вік на сайті', u.age)}${kv('Дата реєстрації', u.createdAt ? fmtTime(u.createdAt) : '')}</div>
         <div class="dq-card"><div class="dq-cap">Дані з анкети</div>
-            ${kv('ПІБ', p.fullName)}${kv('Roblox (юзернейм та дисплей нейм)', p.roblox)}${kv('Дата народження', fmtBirth(p.birth))}
+            ${kv('@username', p.fullName)}${kv('DisplayName', p.roblox)}${kv('Дата народження', fmtBirth(p.birth))}
             ${kv('Стать', p.gender)}${kv('Місце народження', p.city)}${kv('Подано', fmtTime(p.time))}</div>
         <div class="dq-card"><div class="dq-cap">Підпис</div>
             ${sg.val() ? `<img class="dq-sigprev" src="${esc(sg.val())}" alt="">` : '<div class="dq-muted">Підпис не додано</div>'}</div>
@@ -2123,7 +2131,7 @@ async function vDbDetail(tok) {
                 <div><b>${esc(nick)}</b><div style="margin-top:4px">${rolesHtmlOf(u.roles)}</div></div></div>
             ${kv('Вік на сайті', u.age)}${kv('Дата реєстрації', u.createdAt ? fmtTime(u.createdAt) : '')}</div>
         <div class="dq-card"><div class="dq-cap">Дані паспорта <span class="dq-chip ${st[1]}" style="margin-left:6px">${st[0]}</span></div>
-            ${kv('ПІБ', p.fullName)}${kv('Roblox', p.roblox)}${kv('Дата народження', fmtBirth(p.birth))}
+            ${kv('ПІБ', p.fullName)}${kv('DisplayName', p.roblox)}${kv('Дата народження', fmtBirth(p.birth))}
             ${kv('Стать', p.gender)}${kv('Місце народження', p.city)}${p.number ? kv('Номер', p.number) : ''}
             ${kv('Подано', fmtTime(p.time))}
             ${p.issuedAt ? kv('Видано', fmtTime(p.issuedAt)) : ''}
